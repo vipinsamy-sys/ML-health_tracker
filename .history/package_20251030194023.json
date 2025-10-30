@@ -1,0 +1,17 @@
+{
+  "name": "h1",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  6       "scripts": {
+7         "start": "node server.js"
+8       },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^5.1.0",
+    "mongodb": "^6.20.0"
+  }
+}

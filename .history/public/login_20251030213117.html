@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HealthRisk AI - Home</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="app.css" rel="stylesheet">
+  <style>
+    body {
+      background: linear-gradient(120deg, #e6f7fa 0%, #e6effd 100%);
+    }
+    .navbar { background: linear-gradient(90deg, #d3fcf8 0%, #e0edfd 100%); border-bottom: 1px solid #c3e6e7; }
+    .hero {
+      min-height: 70vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .chatbot-fab {
+      position: fixed;
+      right: 24px;
+      bottom: 24px;
+      z-index: 999;
+      width: 60px; height: 60px;
+      border-radius: 50%;
+      font-size: 2rem;
+      background: #44e0c4;
+      color: #fff;
+      border: none;
+      box-shadow: 0 8px 24px #60b8b1a8;
+      transition: box-shadow 0.2s;
+    }
+    .chatbot-fab:hover { box-shadow: 0 16px 32px #60b8b1c0; background: #13b295; }
+    .chatbot-popup {
+      position: fixed;
+      right: 24px;
+      bottom: 100px;
+      width: 330px; max-width: 95vw;
+      border-radius: 18px;
+      background: #f0fcfc;
+      box-shadow: 0 8px 32px rgba(70,120,140,0.16);
+      overflow: hidden;
+      z-index:1100
+    }
+    .chatbot-header {
+      background: #23c9b2;color:#fff;
+padding:.75rem 1.2rem; display:flex;align-items:center;justify-content:space-between; }
+    .chatbot-body {
+      max-height: 200px; overflow-y: auto; padding: 1rem 1rem 0.5rem 1rem; color: #216164;
+      background: #f7fafb;
+      font-size: 0.98rem;
+    }
+    .chatbot-footer {
+      background: #fff;
+      padding: 0.5rem 1rem;
+      border-top: 1px solid #d3fcf8;
+    }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-light">
+    <div class="container-fluid">
+      <a class="navbar-brand fw-bold text-primary" href="login.html">HealthRisk AI</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link active" href="login.html">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="predict.html">Predict</a></li>
+          <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
+          <li class="nav-item"><a class="nav-link" href="#" onclick="openChatbot();return false;">Chatbot</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <div class="hero">
+    <div class="container">
+      <div class="card shadow-lg mx-auto p-5" style="border-radius:24px; max-width:500px;">
+        <h1 class="display-5 fw-bold text-success text-center">Welcome!</h1>
+        <p class="lead text-center text-primary fw-semibold">
+          Predict your health risk for diseases like diabetes or heart problems using AI.
+        </p>
+        <div class="text-center mt-4">
+          <a class="btn btn-lg btn-primary" href="predict.html">
+            Start Health Risk Prediction
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Floating Chatbot Button -->
+  <button class="chatbot-fab" id="open-fab" onclick="openChatbot();" title="Open Chatbot">💬</button>
+  <!-- Popup chatbox -->
+  <div class="chatbot-popup d-none" id="chatbotPopup">
+    <div class="chatbot-header">
+      <span><b>HealthBot</b></span>
+      <button onclick="closeChatbot();" class="btn btn-sm btn-light">&times;</button>
+    </div>
+    <div class="chatbot-body">
+      <div class="text-secondary small mb-2">Ask about health, diet, or prevention tips!</div>
+      <div><b>User:</b> How to prevent diabetes?<br><b>Bot:</b> Maintain a healthy weight, exercise regularly, reduce sugar intake, and get regular checkups.</div>
+      <div class="mt-2"><b>User:</b> Healthy habits for heart?<br><b>Bot:</b> Eat a balanced diet, stay active, avoid smoking & alcohol, and manage stress.</div>
+    </div>
+    <div class="chatbot-footer d-flex">
+      <input type="text" class="form-control me-2" disabled placeholder="Type your question... (demo only)">
+      <button class="btn btn-success" disabled>Send</button>
+    </div>
+  </div>
+  <script>
+  
+    function openChatbot() {
+      document.getElementById('chatbotPopup').classList.remove('d-none');
+      document.getElementById('open-fab').style.display = 'none';
+    }
+    function closeChatbot() {
+      document.getElementById('chatbotPopup').classList.add('d-none');
+      document.getElementById('open-fab').style.display = '';
+    }
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
