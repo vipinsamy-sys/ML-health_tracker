@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Health Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #2563eb;
+      --secondary: #10b981;
+      --accent: #93c5fd;
+      --background: #f8fafc;
+      --card-bg: #ffffff;
+      --text: #1e293b;
+      --muted: #64748b;
+      --border: #e2e8f0;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Inter", sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #f0f9ff, #e0f7f4);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    header {
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+      padding: 16px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    header h1 {
+      font-size: 24px;
+      font-weight: 700;
+    }
+
+    header p {
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    .badge {
+      padding: 6px 12px;
+      border: 1px solid var(--primary);
+      border-radius: 8px;
+      font-size: 13px;
+      color: var(--primary);
+      background: rgba(37, 99, 235, 0.1);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    main {
+      padding: 40px;
+      max-width: 1200px;
+      margin: auto;
+    }
+
+    /* Stats Grid */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 24px;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+    }
+
+    .stat-title {
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .stat-value {
+      font-size: 28px;
+      font-weight: 700;
+      margin: 6px 0;
+    }
+
+    .stat-change {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--secondary);
+    }
+
+    /* Quick Actions */
+    h2 {
+      font-size: 22px;
+      margin-top: 48px;
+      margin-bottom: 16px;
+      font-weight: 700;
+    }
+
+    .quick-actions {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+    }
+
+    .action-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+      transition: all 0.3s ease;
+    }
+
+    .action-card:hover {
+      transform: translateY(-6px);
+      border-color: var(--primary);
+      box-shadow: 0 8px 20px rgba(37,99,235,0.1);
+    }
+
+    .action-icon {
+      width: 48px;
+      height: 48px;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      border-radius: 12px;
+      margin-bottom: 16px;
+    }
+
+    .action-card h3 {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .action-card p {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .get-started {
+      color: var(--primary);
+      font-weight: 600;
+      font-size: 14px;
+      margin-top: 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Recent Activity */
+    .activity-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+      margin-top: 16px;
+    }
+
+    .activity-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px;
+      border-radius: 12px;
+      background: rgba(0,0,0,0.03);
+      margin-bottom: 8px;
+      transition: background 0.2s;
+    }
+
+    .activity-item:hover {
+      background: rgba(0,0,0,0.06);
+    }
+
+    .activity-info {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .activity-info p {
+      font-size: 14px;
+      margin-bottom: 4px;
+    }
+
+    .activity-info span {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .btn {
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .btn:hover {
+      background: #1d4ed8;
+    }
+
+    /* AI Assistance Section */
+    .ai-card {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: white;
+      padding: 48px;
+      border-radius: 24px;
+      margin-top: 48px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .ai-card h3 {
+      font-size: 26px;
+      margin-bottom: 12px;
+      font-weight: 700;
+    }
+
+    .ai-card p {
+      max-width: 600px;
+      line-height: 1.6;
+    }
+
+    .ai-btn {
+      background: white;
+      color: var(--primary);
+      margin-top: 20px;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+
+    .ai-btn:hover {
+      transform: scale(1.05);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div>
+      <h1>Dashboard</h1>
+      <p>Welcome back! Here's your clinic overview</p>
+    </div>
+    <div class="badge">⏱️ Real-time</div>
+  </header>
+
+  <main>
+    <!-- Stats Grid -->
+    <div class="stats-grid">
+      <div class="card">
+        <p class="stat-title">Total Patients</p>
+        <p class="stat-value">247</p>
+        <p class="stat-change">+12%</p>
+      </div>
+      <div class="card">
+        <p class="stat-title">Health Checks Today</p>
+        <p class="stat-value">18</p>
+        <p class="stat-change">+5</p>
+      </div>
+      <div class="card">
+        <p class="stat-title">Pending Reports</p>
+        <p class="stat-value">9</p>
+        <p class="stat-change" style="color: #ef4444;">-3</p>
+      </div>
+      <div class="card">
+        <p class="stat-title">Appointments</p>
+        <p class="stat-value">14</p>
+        <p class="stat-change">+2</p>
+      </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <h2>Quick Actions</h2>
+    <div class="quick-actions">
+      <div class="action-card">
+        <div class="action-icon"></div>
+        <h3>New Health Check</h3>
+        <p>Start a new patient health assessment.</p>
+        <div class="get-started">Get Started →</div>
+      </div>
+      <div class="action-card">
+        <div class="action-icon"></div>
+        <h3>Patient Records</h3>
+        <p>View and manage patient information.</p>
+        <div class="get-started">Get Started →</div>
+      </div>
+      <div class="action-card">
+        <div class="action-icon"></div>
+        <h3>Medical Reports</h3>
+        <p>Access diagnosis reports and history.</p>
+        <div class="get-started">Get Started →</div>
+      </div>
+    </div>
+
+    <!-- Recent Activity -->
+    <h2>Recent Activity</h2>
+    <div class="activity-card">
+      <div class="activity-item">
+        <div class="activity-info">
+          <p>✅ Health check completed for Patient #2451</p>
+          <span>5 minutes ago</span>
+        </div>
+        <button class="btn">View</button>
+      </div>
+      <div class="activity-item">
+        <div class="activity-info">
+          <p>🕒 Appointment scheduled with Dr. Kumar</p>
+          <span>15 minutes ago</span>
+        </div>
+        <button class="btn">View</button>
+      </div>
+    </div>
+
+    <!-- AI Assistant Section -->
+    <div class="ai-card">
+      <h3>Need AI Assistance?</h3>
+      <p>Get instant diagnosis suggestions and care recommendations with our AI-powered health companion.</p>
+      <button class="ai-btn">Start AI Health Check</button>
+    </div>
+  </main>
+</body>
+</html>

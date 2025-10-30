@@ -6,7 +6,6 @@ from sklearn.preprocessing import OneHotEncoder
 from sklearn.linear_model import LogisticRegression
 from sklearn.pipeline import Pipeline
 from sklearn.metrics import accuracy_score
-from sklearn.impute import SimpleImputer
 import joblib
 import os
 
@@ -29,13 +28,6 @@ numeric_features = [
     'age',
     'sleep_hours',
     'water_intake_liters',
-    'bmi',
-    'height_cm',
-    'weight_kg',
-    'glucose',
-    'systolic_bp',
-    'diastolic_bp',
-    'sugar',
 ]
 
 # Create larger, more realistic dataset with correlated features
@@ -90,34 +82,6 @@ junk_food_freq = np.where(
     np.random.choice(['Rarely', 'Weekly', 'Daily'], N, p=[0.55, 0.35, 0.10])
 )
 
-# Height (m) and Weight (kg) to derive BMI
-height_m = np.clip(np.random.normal(1.65, 0.1, N), 1.45, 2.05)
-weight_kg = np.clip(
-    np.random.normal(65, 12, N)
-    + (diet_type == 'Fast-food lover') * 5
-    - (physical_activity == 'Regularly') * 3,
-    40, 160
-)
-bmi = np.round(weight_kg / (height_m ** 2), 1)
-
-# Clinical labs (simulate fasting glucose mg/dL and an additional sugar marker e.g., random glucose)
-glucose = np.clip(
-    np.random.normal(95 + (age > 45) * 10 + (family_history == 'Diabetes') * 15, 15, N),
-    60, 220
-)
-systolic_bp = np.clip(
-    np.random.normal(120 + (age > 50) * 15 + (bmi > 28) * 10, 12, N),
-    90, 200
-)
-diastolic_bp = np.clip(
-    np.random.normal(80 + (bmi > 28) * 5, 8, N),
-    55, 120
-)
-Sugar_random = np.clip(
-    np.random.normal(110 + (diet_type == 'Fast-food lover') * 10 + (stress_level == 'High') * 8, 20, N),
-    70, 260
-)
-
 data = pd.DataFrame({
     'age': age,
     'gender': gender,
@@ -131,20 +95,12 @@ data = pd.DataFrame({
     'stress_level': stress_level,
     'water_intake_liters': np.round(water_intake_liters, 1),
     'junk_food_freq': junk_food_freq,
-    'bmi': np.round(bmi, 1),
-    'height_cm': np.round(height_m * 100.0, 1),
-    'weight_kg': np.round(weight_kg, 1),
-    'glucose': np.round(glucose, 1),
-    'systolic_bp': np.round(systolic_bp, 1),
-    'diastolic_bp': np.round(diastolic_bp, 1),
-    'sugar': np.round(Sugar_random, 1),
 })
 
 # Generate synthetic risk score with realistic influence
 risk_score = (
     (age > 55).astype(int) * 0.8 +
     (body_type == 'Overweight').astype(int) * 0.9 +
-    (bmi > 27).astype(int) * 0.7 +
     (diet_type == 'Fast-food lover').astype(int) * 0.8 +
     (physical_activity == 'Rarely').astype(int) * 0.9 +
     (sleep_hours < 6).astype(int) * 0.6 +
@@ -153,11 +109,7 @@ risk_score = (
     (family_history != 'None').astype(int) * 0.8 +
     (stress_level == 'High').astype(int) * 0.7 +
     (water_intake_liters < 2).astype(int) * 0.5 +
-    (junk_food_freq == 'Daily').astype(int) * 0.7 +
-    (glucose > 130).astype(int) * 1.0 +
-    (systolic_bp > 140).astype(int) * 0.7 +
-    (diastolic_bp > 90).astype(int) * 0.6 +
-    (data['sugar'] > 160).astype(int) * 0.6
+    (junk_food_freq == 'Daily').astype(int) * 0.7
 )
 
 # Convert score to probability and then binary label
@@ -210,13 +162,8 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_
 
 preprocessor = ColumnTransformer(
     transformers=[
-        ('cat', Pipeline(steps=[
-            ('impute', SimpleImputer(strategy='most_frequent')),
-            ('ohe', OneHotEncoder(handle_unknown='ignore')),
-        ]), categorical_features),
-        ('num', Pipeline(steps=[
-            ('impute', SimpleImputer(strategy='median')),
-        ]), numeric_features),
+        ('cat', OneHotEncoder(handle_unknown='ignore'), categorical_features),
+        ('num', 'passthrough', numeric_features),
     ]
 )
 

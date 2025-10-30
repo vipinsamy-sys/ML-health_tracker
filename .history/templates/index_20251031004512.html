@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Predict - HealthRisk AI</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+
+</head>
+ <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-light">
+    <div class="container-fluid">
+      <a class="navbar-brand fw-bold text-primary" href="index.html">HealthRisk AI</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+          <li class="nav-item"><a class="nav-link active" href="predict.html">Predict</a></li>
+          <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
+          <li class="nav-item"><a class="nav-link" href="#" onclick="openChatbot();return false;">Chatbot</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+<body class="bg-light">
+  <div class="container text-center mt-5">
+    <h2 class="mb-4">🩺 Personalized Healthcare Risk Prediction</h2>
+    <form action="/predict" method="POST" class="card p-4 shadow-sm mx-auto" style="max-width:400px;">
+      <input type="number" class="form-control mb-2" name="age" placeholder="Age" required>
+      <input type="number" class="form-control mb-2" name="bmi" placeholder="BMI" required step="0.1">
+      <input type="number" class="form-control mb-2" name="bp" placeholder="Blood Pressure" required>
+      <input type="number" class="form-control mb-3" name="glucose" placeholder="Glucose Level" required>
+      <button class="btn btn-primary w-100">Predict Risk</button>
+    </form>
+    {% if result %}
+      <div class="alert alert-info mt-4">{{ result }}</div>
+    {% endif %}
+    <!-- Floating Chatbot Button -->
+  <button class="chatbot-fab" id="open-fab" onclick="openChatbot();" title="Open Chatbot">💬</button>
+  <div class="chatbot-popup d-none" id="chatbotPopup">
+    <div class="chatbot-header">
+      <span><b>HealthBot</b></span>
+      <button onclick="closeChatbot();" class="btn btn-sm btn-light">&times;</button>
+    </div>
+    <div class="chatbot-body">
+      <div class="text-secondary small mb-2">Ask about health, diet, or prevention tips!</div>
+    
+    </div>
+    <div class="chatbot-footer d-flex">
+      <input type="text" class="form-control me-2" disabled placeholder="Type your question... (demo only)">
+      <button class="btn btn-success" disabled>Send</button>
+    </div>
+  </div>
+  <script>
+    function openChatbot() {
+      document.getElementById('chatbotPopup').classList.remove('d-none');
+      document.getElementById('open-fab').style.display = 'none';
+    }
+    function closeChatbot() {
+      document.getElementById('chatbotPopup').classList.add('d-none');
+      document.getElementById('open-fab').style.display = '';
+    }
+    function showResult(event) {
+      event.preventDefault();
+      document.getElementById('resultBox').classList.remove('d-none');
+    }
+  </script>
+  </div>
+</body>
+</html>

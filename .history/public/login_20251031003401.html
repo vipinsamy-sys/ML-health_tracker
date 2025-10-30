@@ -86,7 +86,7 @@ padding:.75rem 1.2rem; display:flex;align-items:center;justify-content:space-bet
           Predict your health risk for diseases like diabetes or heart problems using AI.
         </p>
         <div class="text-center mt-4">
-          <a class="btn btn-lg btn-primary" href="http://127.0.0.1:5000/">
+          <a class="btn btn-lg btn-primary" href="predict.html">
             Start Health Risk Prediction
           </a>
         </div>
@@ -102,10 +102,10 @@ padding:.75rem 1.2rem; display:flex;align-items:center;justify-content:space-bet
       <span><b>HealthBot</b></span>
       <button onclick="closeChatbot();" class="btn btn-sm btn-light">&times;</button>
     </div>
-    <div class="chatbot-body" id="chatBody"></div>
+   
     <div class="chatbot-footer d-flex">
-      <input type="text" class="form-control me-2" id="chatInput" placeholder="Type your question...">
-      <button class="btn btn-success" id="chatSend">Send</button>
+      <input type="text" class="form-control me-2" disabled placeholder="Type your question... (demo only)">
+      <button class="btn btn-success" disabled>Send</button>
     </div>
   </div>
   <script>
@@ -118,59 +118,6 @@ padding:.75rem 1.2rem; display:flex;align-items:center;justify-content:space-bet
       document.getElementById('chatbotPopup').classList.add('d-none');
       document.getElementById('open-fab').style.display = '';
     }
-    // Chatbox logic (cross-origin to Flask at 5000)
-    (function(){
-      const chatBody = document.getElementById('chatBody');
-      const chatInput = document.getElementById('chatInput');
-      const chatSend = document.getElementById('chatSend');
-
-      function appendMessage(role, text){
-        const wrap = document.createElement('div');
-        wrap.className = role === 'user' ? 'text-end mb-2' : 'text-start mb-2';
-        const bubble = document.createElement('div');
-        bubble.className = role === 'user' ? 'd-inline-block px-3 py-2 bg-primary text-white rounded-3' : 'd-inline-block px-3 py-2 bg-white border rounded-3';
-        bubble.textContent = text;
-        wrap.appendChild(bubble);
-        chatBody.appendChild(wrap);
-        chatBody.scrollTop = chatBody.scrollHeight;
-      }
-
-      async function sendMessage(){
-        const msg = (chatInput.value || '').trim();
-        if(!msg) return;
-        appendMessage('user', msg);
-        chatInput.value = '';
-
-        const thinking = document.createElement('div');
-        thinking.className = 'text-start mb-2 text-secondary small';
-        thinking.textContent = 'Thinking…';
-        chatBody.appendChild(thinking);
-        chatBody.scrollTop = chatBody.scrollHeight;
-
-        try{
-          const res = await fetch('http://127.0.0.1:5000/api/chat', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ message: msg })
-          });
-          const data = await res.json();
-          thinking.remove();
-          if(data && data.reply){
-            appendMessage('assistant', data.reply);
-          } else if (data && data.error){
-            appendMessage('assistant', 'Error: ' + data.error);
-          } else {
-            appendMessage('assistant', 'No response.');
-          }
-        }catch(err){
-          thinking.remove();
-          appendMessage('assistant', 'Network error.');
-        }
-      }
-
-      chatSend.addEventListener('click', sendMessage);
-      chatInput.addEventListener('keydown', function(e){ if(e.key === 'Enter'){ sendMessage(); }});
-    })();
   </script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>

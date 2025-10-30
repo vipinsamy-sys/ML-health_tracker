@@ -3,8 +3,6 @@
 <head>
   <meta charset="UTF-8">
   <title>Predict - HealthRisk AI</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
  <style>
     body {
@@ -38,7 +36,7 @@
   </nav>
 <body class="bg-light">
   <div class="container text-center mt-5">
-    <h2 class="mb-4"> Personalized Healthcare Risk Prediction</h2>
+    <h2 class="mb-4">🩺 Personalized Healthcare Risk Prediction</h2>
     <form action="/predict" method="POST" class="card p-4 shadow-sm mx-auto" style="max-width:520px; text-align:left;">
       <div class="row g-2">
         <div class="col-6">
@@ -142,30 +140,6 @@
             <option value="Daily">Daily</option>
           </select>
         </div>
-        <div class="col-6">
-          <label class="form-label">Height (cm)</label>
-          <input type="number" step="0.1" class="form-control" name="height_cm"  required>
-        </div>
-        <div class="col-6">
-          <label class="form-label">Weight (kg)</label>
-          <input type="number" step="0.1" class="form-control" name="weight_kg"  required>
-        </div>
-        <div class="col-6">
-          <label class="form-label">Fasting Glucose (mg/dL) <span class="text-muted">(optional)</span></label>
-          <input type="number" step="0.1" class="form-control" name="glucose" >
-        </div>
-        <div class="col-6">
-          <label class="form-label">Random Sugar (mg/dL) <span class="text-muted">(optional)</span></label>
-          <input type="number" step="0.1" class="form-control" name="sugar" >
-        </div>
-        <div class="col-6">
-          <label class="form-label">Systolic BP (mmHg) <span class="text-muted">(optional)</span></label>
-          <input type="number" step="0.1" class="form-control" name="systolic_bp" >
-        </div>
-        <div class="col-6">
-          <label class="form-label">Diastolic BP (mmHg) <span class="text-muted">(optional)</span></label>
-          <input type="number" step="0.1" class="form-control" name="diastolic_bp" >
-        </div>
       </div>
       <button class="btn btn-primary w-100 mt-3">Predict Risk</button>
     </form>
@@ -187,7 +161,23 @@
       <button class="btn btn-success" id="chatSend">Send</button>
     </div>
   </div>
-  
+  <form id="healthForm" action="/predict" method="POST" class="card p-4 shadow-sm mx-auto" style="max-width:520px; text-align:left;">
+  <!-- your input fields here -->
+  <button class="btn btn-primary w-100 mt-3">Predict Risk</button>
+</form>
+
+<script>
+document.getElementById("healthForm").addEventListener("submit", function(event) {
+  const selects = document.querySelectorAll("select");
+  for (const select of selects) {
+    if (select.value === "" || select.value === "select") {
+      alert("⚠️ Please select a valid option for all fields.");
+      event.preventDefault();
+      return;
+    }
+  }
+});
+</script>
 
   <script>
     function openChatbot() {
